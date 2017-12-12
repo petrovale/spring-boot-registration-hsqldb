@@ -47,14 +47,16 @@ public class UserController {
 
     @RequestMapping(value = "/sign-up", method = RequestMethod.POST)
     public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
-        log.info("create {}", userForm);
+        log.info("Start sign-up");
         UserUtil.prepareToSave(userForm, request);
         userValidator.validate(userForm, bindingResult);
 
         if (bindingResult.hasErrors()) {
+            log.error("Processing failed {}", bindingResult.getModel());
             return "sign-up";
         }
         userService.save(userForm);
+        log.info("create {}", userForm);
 
         securityService.autologin(userForm.getUsername(), userForm.getPasswordConfirm());
 
@@ -65,14 +67,19 @@ public class UserController {
     public String login(Model model, String error, String logout) {
         log.info("sign-in");
         if (AuthorizedUser.safeGet() != null) {
+            log.info("redirect:/junior-3/greetings");
             return "redirect:/junior-3/greetings";
         }
 
-        if (error != null)
+        if (error != null) {
+            log.error("Username and password are not suitable.");
             model.addAttribute("error", "Имя пользователя и пароль не подходят.");
+        }
 
-        if (logout != null)
+        if (logout != null) {
+            log.info("You have successfully quit the application.");
             model.addAttribute("message", "Вы успешно вышли из приложения.");
+        }
 
         return "sign-in";
     }
