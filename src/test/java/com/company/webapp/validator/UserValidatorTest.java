@@ -1,22 +1,21 @@
 package com.company.webapp.validator;
 
-import com.company.webapp.WebApplication;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = WebApplication.class)
-@WebAppConfiguration
 public class UserValidatorTest {
 
-    @Autowired
+    @InjectMocks
     private UserValidator userValidator;
+
+    @Before
+    public void setupMock() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void testIsValidPassword() throws Exception {
